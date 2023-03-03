@@ -1,0 +1,33 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: dh-eks
+  region: ap-northeast-2
+  version: "1.24"
+
+vpc:
+  id: "vpc-0c83ff6e1a57b0f8e"
+  securityGroup: "sg-0390fecdf1bc57f94"
+  subnets:
+    private:
+      private1:
+        id: "subnet-0a22064b5f5f3e008"
+      private3:
+        id: "subnet-08c62f2b6aa253a02"
+
+iam:
+  serviceRoleARN: "arn:aws:iam::967699999360:role/EKS-ControlPlane-Role"
+
+nodeGroups:
+  - name: eks-node
+    instanceType: t2.medium #t2.micro로 모니터링 버거움
+    minSize: 2
+    desiredCapacity: 2
+    maxSize: 5
+    privateNetworking: true
+    ssh:
+      allow: true
+      publicKeyName: traffic-test
+    iam:
+      instanceRoleARN: "arn:aws:iam::967699999360:role/EKS-WorkerNode-Role"
